@@ -34,7 +34,25 @@ typedef struct {
     int volumes_adquiridos[MAX_VOLUMES];
 } Livro; // " manga "
 
-void criar_registro(FILE *arquivo_registros);
-void ler_registro(FILE *arquivo_registros);
-void att_registro(FILE *arquivo_registros);
-void apagar_registro(FILE *arquivo_registros);
+//lista encadeada que armazena os dados do indice primario
+
+
+
+typedef struct {
+    char isbn[15];
+    int posicao;
+} IndicePrimario;
+
+typedef struct {
+    char titulo[MAX_TITULO];
+    int posicao;
+} IndiceSecundario;
+
+void criar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);
+void ler_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);
+void att_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);
+void apagar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);
+int encontrar_registro_isbn(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario); //retorna posição do registro
+int encontrar_registro_titulo(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario); //retorna posição do registro
+int att_indiceP(FILE *arquivoIndicePrimario, char *isbn, int posicao);
+int att_indiceS(FILE *arquivoIndiceSecundario, char *titulo, int posicao);

@@ -1,7 +1,24 @@
 #include "headers/func.h"
 
 void main(){
+
+    // Abre os arquivos
     FILE *out_registros = fopen (REGISTROS, "w+");
+    if(out_registros == NULL){
+        printf("Erro ao abrir o arquivo de registros\n");
+        exit(1);
+    }
+    FILE *out_indices_primarios = fopen (INDICES_P, "w+");
+    if(out_indices_primarios == NULL){
+        printf("Erro ao abrir o arquivo de indices primarios\n");
+        exit(1);
+    }
+    FILE *out_indices_secundarios = fopen (INDICES_S, "w+");
+    if(out_indices_secundarios == NULL){
+        printf("Erro ao abrir o arquivo de indices secundarios\n");
+        exit(1);
+    }
+
 
     int opcao;
 
@@ -13,7 +30,7 @@ void main(){
     printf("5. Sair\n");
     printf("Selecione uma opcao: \n");    
     
-    while(TRUE){
+    while(opcao != 5){
 
         scanf("%d", &opcao);
 
@@ -38,9 +55,11 @@ void main(){
                 printf("\nSaindo ...");
                 break;
             default:
-                prinft("opcao invalida -- escolha outra opcao: ");    
+                prinft("opcao invalida -- escolha outra opcao: ");
+                break;    
         }
         fclose(out_registros);
-
+        fclose(out_indices_primarios);
+        fclose(out_indices_secundarios);
     }
 }
