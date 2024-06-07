@@ -6,7 +6,7 @@
 #define FALSE 0
 
 #define FIM_REGISTRO "#"
-#define FIM_CAMPO "|"
+#define VAZIO "@"
 
 #define REGISTROS "registros.txt"
 #define INDICES_P "indices primarios.txt"
@@ -45,16 +45,16 @@ typedef struct {
 } IndiceSecundario;
  
 
-void criar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario, Node* headP, Node* headS);
+void criar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario, Node* headP, Node* headS);//cria um registro (de tamanho fixo e campos de tamanho fixo) e coloca no arquivo, coloca tambem nos indices
 void ler_registro(FILE *arquivo_registros, Node* headP, Node* headS);//procura no indice primario ou secundario e imprime o registro
 void apagar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);//procura no indice primario ou secundario e apaga o registro nas listas de indices e no arquivo de registros
 
 int encontrar_registro_isbn(Node* headP); //procura na lista de indice primario e retorna posição do registro
 int encontrar_registro_titulo(Node* headS); //procura na lista de indice secundario e retorna posição do registro
 
-void att_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);
-void att_indiceP(FILE *arquivoIndicePrimario, char *isbn, int posicao);//atualiza o indice primario na RAM e no arquivo
-void att_indiceS(FILE *arquivoIndiceSecundario, char *titulo, int posicao);//atualiza o indice secundario na RAM e no arquivo
+void att_registro(FILE *arquivo_registros,FILE* arquivoIndicePrimario, FILE* arquivoIndiceSecundario, Node *headP, Node *headS);//atualizar o arquivo de registro, após procurar nos indices e achar o registro
+void att_indiceP(FILE *arquivoIndicePrimario, char *isbn, int posicao, Node *headP);//atualiza o indice primario na RAM e no arquivo
+void att_indiceS(FILE *arquivoIndiceSecundario, char *titulo, int posicao, Node *headS);//atualiza o indice secundario na RAM e no arquivo
 
 void RAM_IndicePrimario(char isnb[15], int posicao, Node* headS); //coloca um dado de indice primario na lista encadeada (list.c)
 //como o indice secundario possui apenas o titulo nao eh possivel coloca-lo em ordem, como se fosse com o autor (por exemplo), porque os titulos serao sempre diferentes
@@ -63,4 +63,4 @@ void RAM_IndiceSecundario(char titulo[MAX_TITULO], int posicao, Node* headS); //
 void arq_IndicePrimario_RAM(FILE *arquivoIndicePrimario, Node* headP); //coloca os dados do arquivo de indices primarios na RAM (em uma lista encadeada (list.c))
 void arq_IndiceSecundario_RAM(FILE *arquivoIndiceSecundario, Node* headS); //coloca os dados do arquivo de indices secundarios na RAM (em uma lista encadeada (list.c))
 void ColocaArquivo_IndiceP(FILE *arquivoIndicePrimario, Node* headP); //coloca os dados da RAM no arquivo de indices primarios
-void ColocaArquivo_IndiceS(FILE *arquivoIndiceSecundario, Node* headS); //coloca os dados da RAM no arquivo de indices secundarios
+void ColocaArquivo_IndiceS(FILE *arquivoIndiceSecundario, Node* headS); //coloca os dados da RAM no arquivo de indices secundarios 
