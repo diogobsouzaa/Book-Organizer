@@ -1,6 +1,9 @@
 #include "headers/func.h"
+#include "headers/list.h"
 
 void main(){
+    Node *headP = NULL;
+    Node *headS = NULL;
 
     // Abre os arquivos
     FILE *out_registros = fopen (REGISTROS, "w+");
