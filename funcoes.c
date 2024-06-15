@@ -1,7 +1,7 @@
 #include "headers/func.h"
 #include "headers/list.h"
 
-void criar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario, Node* headP, Node* headS){
+void criar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario, Node** headP, Node** headS) {
     Livro livro;
     IndicePrimario indicePrimario;
     IndiceSecundario indiceSecundario;
@@ -9,79 +9,60 @@ void criar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *
     fseek(arquivo_registros, 0, SEEK_END);
     int posicao = ftell(arquivo_registros);
 
-    printf("Forneça algumas informações sobre o livro: \n");
+    printf("Forneca algumas informacoes sobre o livro: \n");
     printf("ISBN: ");
-    scanf("%s\n", livro.isbn);
-    printf("\nTitulo: ");
+    scanf("%s", livro.isbn); // Removed \n
+    printf("Titulo: ");
     scanf(" %[^\n]", livro.titulo);
-    printf("\nAutores: ");
+    printf("Autores: ");
     scanf(" %[^\n]", livro.autores);
-    printf("\nAno de Inicio: ");
+    printf("Ano de Inicio: ");
     scanf("%d", &livro.ano_inicio);
-    printf("\nAno de Fim: ");
+    printf("Ano de Fim: ");
     scanf("%d", &livro.ano_fim);
-    printf("\nGenero: ");
+    printf("Genero: ");
     scanf(" %[^\n]", livro.genero);
-    printf("\nRevista: ");
+    printf("Revista: ");
     scanf(" %[^\n]", livro.revista);
-    printf("\nEditora: ");
+    printf("Editora: ");
     scanf(" %[^\n]", livro.editora);
-    printf("\nAno da Edicao: ");
+    printf("Ano da Edicao: ");
     scanf("%d", &livro.ano_edicao);
-    printf("\nQuantidade de Volumes: ");
+    printf("Quantidade de Volumes: ");
     scanf("%d", &livro.quantidade_volumes);
-    printf("\nQuantidade de Volumes Adquiridos: ");
+    printf("Quantidade de Volumes Adquiridos: ");
     scanf("%d", &livro.quantidade_volumes_adquiridos);
 
-    printf("\nQuais volumes voce possui ? (para parar envie -1) : ");
+    printf("Quais volumes voce possui? (para parar envie -1): ");
     int sair = 0;
     for (int i = 0; i < MAX_VOLUMES; i++) {
         scanf("%d", &sair);
-        if (sair != -1){
+        if (sair != -1) {
             livro.volumes_adquiridos[i] = sair;
-        }
-        else{
+        } else {
+            livro.volumes_adquiridos[i] = sair;
             break;
         }
     }
 
-    // Preenchendo campos de string até o tamanho máximo com VAZIO
-    memset(livro.titulo + strlen(livro.titulo), VAZIO, MAX_TITULO - strlen(livro.titulo));
-    memset(livro.autores + strlen(livro.autores), VAZIO, MAX_AUTOR - strlen(livro.autores));
-    memset(livro.genero + strlen(livro.genero), VAZIO, MAX_GENERO - strlen(livro.genero));
-    memset(livro.revista + strlen(livro.revista), VAZIO, MAX_REVISTA - strlen(livro.revista));
-    memset(livro.editora + strlen(livro.editora), VAZIO, MAX_EDITORA - strlen(livro.editora));
-
-    // Garantindo que as strings terminem com '\0'
-    livro.titulo[MAX_TITULO - 1] = '\0';
-    livro.autores[MAX_AUTOR - 1] = '\0';
-    livro.genero[MAX_GENERO - 1] = '\0';
-    livro.revista[MAX_REVISTA - 1] = '\0';
-    livro.editora[MAX_EDITORA - 1] = '\0';
-
     // Escrevendo no arquivo de registros
     fwrite(&livro, sizeof(Livro), 1, arquivo_registros);
 
-    // Colocando FIM_REGISTRO no final do registro
-    fwrite(FIM_REGISTRO, sizeof(char), 1, arquivo_registros);
-
-    // Escrevendo no arquivos de indices
+    // Escrevendo em RAM os indices
     // Se isbn mudou 
     RAM_IndicePrimario(livro.isbn, posicao, headP);
     RAM_IndiceSecundario(livro.titulo, posicao, headS);
 }
 
-
-
-void RAM_IndicePrimario(char isnb[15], int posicao, Node* headP){
-    inserirNoFim(&headP, isnb, posicao);
+void RAM_IndicePrimario(char isbn[15], int posicao, Node** headP) {
+    inserirNoFim(headP, isbn, posicao);
 }
 
-void RAM_IndiceSecundario(char titulo[MAX_TITULO], int posicao, Node* headS){
-    inserirNoFim(&headS, titulo, posicao);
+void RAM_IndiceSecundario(char titulo[MAX_TITULO], int posicao, Node** headS) {
+    inserirNoFim(headS, titulo, posicao);
 }
 
-void arq_IndicePrimario_RAM(FILE *arquivoIndicePrimario, Node* headP){
+void arq_IndicePrimario_RAM(FILE *arquivoIndicePrimario, Node** headP){
     IndicePrimario indicePrimario;
     fseek(arquivoIndicePrimario, 0, SEEK_SET);
     while(fread(&indicePrimario, sizeof(IndicePrimario), 1, arquivoIndicePrimario)){
@@ -89,7 +70,7 @@ void arq_IndicePrimario_RAM(FILE *arquivoIndicePrimario, Node* headP){
     }
 }
 
-void arq_IndiceSecundario_RAM(FILE *arquivoIndiceSecundario, Node* headS){
+void arq_IndiceSecundario_RAM(FILE *arquivoIndiceSecundario, Node** headS){
     IndiceSecundario indiceSecundario;
     fseek(arquivoIndiceSecundario, 0, SEEK_SET);
     while(fread(&indiceSecundario, sizeof(IndiceSecundario), 1, arquivoIndiceSecundario)){
@@ -123,7 +104,7 @@ void ColocaArquivo_IndiceS(FILE *arquivoIndiceSecundario, Node* headS){
 
 int encontrar_registro_isbn(Node* headP){
     char isbn[15];
-    printf("Forneça o ISBN do livro: ");
+    printf("Forneca o ISBN do livro: ");
     scanf("%s", isbn);
     Node* current = buscarPorDado(headP, isbn);
     if(current != NULL){
@@ -136,7 +117,7 @@ int encontrar_registro_isbn(Node* headP){
 
 int encontrar_registro_titulo(Node* headP){
     char titulo[MAX_TITULO];
-    printf("Forneça o titulo do livro: ");
+    printf("Forneca o titulo do livro: ");
     scanf("%s", titulo);
     Node* current = buscarPorDado(headP, titulo);
     if(current != NULL){
@@ -148,24 +129,31 @@ int encontrar_registro_titulo(Node* headP){
 }
  
 void ler_registro(FILE *arquivo_registros, Node* headP, Node* headS){
+
     int opcao;
-    printf("Como deseja procurar o registro ?\n");
+    printf("Como deseja procurar o registro?\n");
     printf("1. ISBN\n");
     printf("2. Titulo\n");
     printf("Selecione uma opcao: ");
     scanf("%d", &opcao);
 
+    if (opcao != 1 && opcao != 2) {
+        printf("Opcao invalida. Por favor, selecione 1 ou 2.\n");
+        return;
+    }
+
     int posicao = -1;
     if(opcao == 1){
         posicao = encontrar_registro_isbn(headP);
     }
-    if (opcao == 2){
+    else if (opcao == 2){
         posicao = encontrar_registro_titulo(headS);
     }
     if(posicao != -1){
         Livro livro;
         fseek(arquivo_registros, posicao, SEEK_SET);
         fread(&livro, sizeof(Livro), 1, arquivo_registros);
+
         printf("\nISBN: %s\n", livro.isbn);
         printf("Titulo: %s\n", livro.titulo);
         printf("Autores: %s\n", livro.autores);
@@ -179,7 +167,13 @@ void ler_registro(FILE *arquivo_registros, Node* headP, Node* headS){
         printf("Quantidade de Volumes Adquiridos: %d\n", livro.quantidade_volumes_adquiridos);
         printf("Volumes Adquiridos: ");
         for (int i = 0; i < MAX_VOLUMES; i++) {
-            printf("%d ", livro.volumes_adquiridos[i]);
+            if(livro.volumes_adquiridos[i] != -1){
+                printf("%d ", livro.volumes_adquiridos[i]);
+            }
+            else{
+                break;
+            }
+            
         }
         printf("\n");
     }
@@ -257,7 +251,7 @@ void att_registro(FILE *arquivo_registros,FILE *arquivoIndicePrimario, FILE *arq
 
 
 
-void att_indiceP(FILE *arquivoIndicePrimario, char *isbn, int posicao, Node* headP){//!
+void att_indiceP(FILE *arquivoIndicePrimario, char *isbn, int posicao, Node* headP){//! não sei se ta certo
     Node* current = buscarPorDado(headP, isbn);
     if(current != NULL){
         current->posicao = posicao;
@@ -269,7 +263,7 @@ void att_indiceP(FILE *arquivoIndicePrimario, char *isbn, int posicao, Node* hea
     ColocaArquivo_IndiceP(arquivoIndicePrimario, headP);
 }
 
-void att_indiceS(FILE *arquivoIndiceSecundario, char *titulo, int posicao, Node* headS){//!
+void att_indiceS(FILE *arquivoIndiceSecundario, char *titulo, int posicao, Node* headS){//! não sei se ta certo
     Node* current = buscarPorDado(headS, titulo);
     if(current != NULL){
         current->posicao = posicao;
@@ -281,4 +275,4 @@ void att_indiceS(FILE *arquivoIndiceSecundario, char *titulo, int posicao, Node*
     ColocaArquivo_IndiceS(arquivoIndiceSecundario, headS);
 }
 
-void apagar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario);
+void apagar_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *arquivoIndiceSecundario); //alterar tbm a lista de indices primarios e secundarios // remover e marcar ou remover e reorganizar

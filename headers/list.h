@@ -1,11 +1,14 @@
+#ifndef LIST_H
+#define LIST_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 // Estrutura de um nó da lista
 typedef struct Node {
-    char dado[40];
-    int posicao;
+    char dado[40]; //isbn (indice primario) ou titulo (indice secundario)
+    int posicao; //byte offset do registro
     struct Node* next;
 } Node;
 
@@ -19,3 +22,4 @@ void imprimirLista(Node* head);
 void remover(Node** head, int posicao);
 void removerPorDado(Node** head, char* dado);
 
+#endif

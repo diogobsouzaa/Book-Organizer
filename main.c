@@ -22,47 +22,55 @@ void main(){
         exit(1);
     }
 
+    // Coloca os indices em RAM (se já existirem no arquivo)
+    arq_IndicePrimario_RAM(out_indices_primarios, &headP);
+    arq_IndiceSecundario_RAM(out_indices_secundarios, &headS);
 
-    int opcao;
-
-    printf("MENU PRINCIPAL\n\nEscolha uma opção:\n");
-    printf("1. Criar Registro\n");
-    printf("2. Ler Registros\n");
-    printf("3. Alterar Registro\n");
-    printf("4. Apagar Registro\n");
-    printf("5. Sair\n");
-    printf("Selecione uma opcao: \n");    
+    int opcao;    
     
     while(opcao != 5){
+
+        printf("MENU PRINCIPAL\nEscolha uma opcao:\n");
+        printf("1. Criar Registro\n");
+        printf("2. Ler Registros\n");
+        printf("3. Alterar Registro\n");
+        printf("4. Apagar Registro\n");
+        printf("5. Salvar e Sair\n");
+        printf("Selecione uma opcao: \n");
 
         scanf("%d", &opcao);
 
         switch(opcao){
             case 1:
-                void criar_registro(out_registros);
-                printf("\n\n");
+                criar_registro(out_registros, out_indices_primarios, out_indices_secundarios, &headP, &headS);
+                printf("\n");
+                printf("registro criado\n\n");
                 break;
             case 2:
-                void ler_registro(out_registros);
+                ler_registro(out_registros, headP, headS);
                 printf("\n\n");
                 break;
             case 3:
-                void att_registro(out_registros);
+                //att_registro;
                 printf("\n\n");
                 break;
             case 4:
-                void apagar_registro(out_registros);
+                //apagar_registro;
                 printf("\n\n");
                 break;
             case 5:
-                printf("\nSaindo ...");
+                //atualizar arquivo de indices
+                ColocaArquivo_IndiceP(out_indices_primarios, headP);
+                ColocaArquivo_IndiceS(out_indices_secundarios, headS);
+                printf("\nConteudo salvo - Saindo ...");
                 break;
             default:
-                prinft("opcao invalida -- escolha outra opcao: ");
+                printf("opcao invalida -- escolha outra opcao: ");
                 break;    
         }
-        fclose(out_registros);
-        fclose(out_indices_primarios);
-        fclose(out_indices_secundarios);
     }
+
+    fclose(out_registros);
+    fclose(out_indices_primarios);
+    fclose(out_indices_secundarios);
 }
