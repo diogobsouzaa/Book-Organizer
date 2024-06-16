@@ -199,6 +199,10 @@ void att_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *ar
         Livro livro;
         fread(&livro, sizeof(Livro), 1, arquivo_registros);
 
+        // Armazenar o ISBN antigo para removê-lo do índice
+        char isbn_antigo[15];
+        strcpy(isbn_antigo, livro.isbn);
+
         printf("Forneca as novas informacoes sobre o livro (deixe em branco para manter o valor atual):\n");
 
         char buffer[100];
@@ -261,7 +265,8 @@ void att_registro(FILE *arquivo_registros, FILE *arquivoIndicePrimario, FILE *ar
         fwrite(&livro, sizeof(Livro), 1, arquivo_registros);
 
         // Atualizar os índices
-        att_indiceP(arquivoIndicePrimario, livro.isbn, posicao, headP);
+        removerPorDado(&headP, isbn_antigo); // Remover o índice antigo
+        att_indiceP(arquivoIndicePrimario, livro.isbn, posicao, headP); // Adicionar o novo índice
         att_indiceS(arquivoIndiceSecundario, livro.titulo, posicao, headS);
 
         printf("Registro atualizado com sucesso.\n");
