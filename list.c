@@ -23,7 +23,7 @@ void inserirNoFim(Node** head, char* dado, int posicao) {
         *head = node;
     } else {
         Node* current = *head;
-        while (current->next!= NULL) {
+        while (current->next != NULL) {
             current = current->next;
         }
         current->next = node;
@@ -33,7 +33,7 @@ void inserirNoFim(Node** head, char* dado, int posicao) {
 // Função para buscar um nó pela posição
 Node* buscarPorPosicao(Node* head, int posicao) {
     Node* current = head;
-    while (current!= NULL) {
+    while (current != NULL) {
         if (current->posicao == posicao) {
             return current;
         }
@@ -45,7 +45,7 @@ Node* buscarPorPosicao(Node* head, int posicao) {
 // Função para buscar um nó pelo dado
 Node* buscarPorDado(Node* head, char* dado) {
     Node* current = head;
-    while (current!= NULL) {
+    while (current != NULL) {
         if (strcmp(current->dado, dado) == 0) {
             return current;
         }
@@ -58,7 +58,7 @@ Node* buscarPorDado(Node* head, char* dado) {
 void inserirNoMeio(Node** head, char* dado, int posicao, int novaPosicao) {
     Node* node = criarNode(dado, novaPosicao);
     Node* current = buscarPorPosicao(*head, posicao);
-    if (current!= NULL) {
+    if (current != NULL) {
         node->next = current->next;
         current->next = node;
     } else {
@@ -69,7 +69,7 @@ void inserirNoMeio(Node** head, char* dado, int posicao, int novaPosicao) {
 // Função para imprimir a lista
 void imprimirLista(Node* head) {
     Node* current = head;
-    while (current!= NULL) {
+    while (current != NULL) {
         printf("Dado: %s, Posição: %d\n", current->dado, current->posicao);
         current = current->next;
     }
@@ -116,3 +116,4 @@ void removerPorDado(Node** head, char* dado) {
     }
     printf("Dado não encontrado\n");
 }
+

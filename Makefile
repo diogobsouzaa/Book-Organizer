@@ -21,3 +21,4 @@ clean:
 
 remove_data:
 	rm -f dados/*.txt
+
